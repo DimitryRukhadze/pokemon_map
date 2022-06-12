@@ -76,6 +76,17 @@ def show_pokemon(request, pokemon_id):
             "pokemon_id": pokemon.evolves_from.id,
             "img_url": request.build_absolute_uri(f'{settings.MEDIA_URL}{pokemon.evolves_from.image}')
         }
+
+    try:
+        successor = pokemon.pokemon_set.get(evolves_from=pokemon)
+        next_evolution = {
+            "title_ru": successor.title,
+            "pokemon_id": successor.id,
+            "img_url": request.build_absolute_uri(f'{settings.MEDIA_URL}{successor.image}')
+        }
+    except ObjectDoesNotExist:
+        next_evolution = None
+
     pokemon_specs = {
         "pokemon_id": pokemon.id,
         "title_ru": pokemon.title,
@@ -83,7 +94,8 @@ def show_pokemon(request, pokemon_id):
         "title_jp": pokemon.title_jp,
         "description": pokemon.description,
         "img_url": pokemon_img_uri,
-        "previous_evolution": previous_evolution
+        "previous_evolution": previous_evolution,
+        "next_evolution": next_evolution
     }
 
     requested_pokemons = PokemonEntity.objects.filter(pokemon=pokemon)
