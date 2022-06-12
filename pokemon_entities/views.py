@@ -69,6 +69,13 @@ def show_pokemon(request, pokemon_id):
         HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
     pokemon_img_uri = request.build_absolute_uri(f'{settings.MEDIA_URL}{pokemon.image}')
+    previous_evolution = None
+    if pokemon.evolves_from:
+        previous_evolution = {
+            "title_ru": pokemon.evolves_from.title,
+            "pokemon_id": pokemon.evolves_from.id,
+            "img_url": request.build_absolute_uri(f'{settings.MEDIA_URL}{pokemon.evolves_from.image}')
+        }
     pokemon_specs = {
         "pokemon_id": pokemon.id,
         "title_ru": pokemon.title,
@@ -76,6 +83,7 @@ def show_pokemon(request, pokemon_id):
         "title_jp": pokemon.title_jp,
         "description": pokemon.description,
         "img_url": pokemon_img_uri,
+        "previous_evolution": previous_evolution
     }
 
     requested_pokemons = PokemonEntity.objects.filter(pokemon=pokemon)
