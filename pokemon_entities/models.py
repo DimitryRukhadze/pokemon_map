@@ -4,7 +4,6 @@ from django.db import models
 class Pokemon(models.Model):
     title = models.CharField(
         max_length=200,
-        blank=True,
         verbose_name='Имя'
     )
     title_en = models.CharField(
@@ -45,11 +44,9 @@ class PokemonEntity(models.Model):
         verbose_name='Тип покемона'
     )
     lat = models.FloatField(
-        blank=True,
         verbose_name='Широта'
     )
     lon = models.FloatField(
-        blank=True,
         verbose_name='Долгота'
     )
     appeared_at = models.DateTimeField(
