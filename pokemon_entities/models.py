@@ -21,8 +21,8 @@ class Pokemon(models.Model):
         blank=True,verbose_name='Изображение'
     )
     description = models.TextField(
-        null=True,
         blank=True,
+        default='',
         verbose_name='Описание'
     )
     evolves_from = models.ForeignKey(
