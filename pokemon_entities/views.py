@@ -2,7 +2,7 @@ import folium
 import json
 
 from django.http import HttpResponseNotFound
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
@@ -63,10 +63,8 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    try:
-        pokemon = Pokemon.objects.get(id=pokemon_id)
-    except ObjectDoesNotExist:
-        HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
+
+    pokemon = get_object_or_404(Pokemon, id=pokemon_id)
 
     pokemon_img_uri = request.build_absolute_uri(pokemon.image.url)
     print(pokemon_img_uri)
