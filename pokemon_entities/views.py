@@ -39,7 +39,7 @@ def show_all_pokemons(request):
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     for entity in pokemon_entities:
-        entity_img_uri = request.build_absolute_uri(f'{settings.MEDIA_URL}{entity.pokemon.image}')
+        entity_img_uri = request.build_absolute_uri(entity.pokemon.image.url)
         add_pokemon(
             folium_map,
             entity.lat,
@@ -50,7 +50,7 @@ def show_all_pokemons(request):
     poke_models = Pokemon.objects.all()
     pokemons_on_page = []
     for pokemon in poke_models:
-        image_uri = request.build_absolute_uri(f'{settings.MEDIA_URL}{pokemon.image}')
+        image_uri = request.build_absolute_uri(pokemon.image.url)
         pokemons_on_page.append({
             'pokemon_id': pokemon.id,
             'img_url': image_uri,
@@ -68,15 +68,14 @@ def show_pokemon(request, pokemon_id):
     except ObjectDoesNotExist:
         HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
-    print(pokemon.image.url)
-
-    pokemon_img_uri = request.build_absolute_uri(f'{settings.MEDIA_URL}{pokemon.image}')
+    pokemon_img_uri = request.build_absolute_uri(pokemon.image.url)
+    print(pokemon_img_uri)
     previous_evolution = None
     if pokemon.evolves_from:
         previous_evolution = {
             "title_ru": pokemon.evolves_from.title,
             "pokemon_id": pokemon.evolves_from.id,
-            "img_url": request.build_absolute_uri(f'{settings.MEDIA_URL}{pokemon.evolves_from.image}')
+            "img_url": request.build_absolute_uri(pokemon.evolves_from.image.url)
         }
 
     try:
@@ -84,7 +83,7 @@ def show_pokemon(request, pokemon_id):
         next_evolution = {
             "title_ru": successor.title,
             "pokemon_id": successor.id,
-            "img_url": request.build_absolute_uri(f'{settings.MEDIA_URL}{successor.image}')
+            "img_url": request.build_absolute_uri(successor.image.url)
         }
     except ObjectDoesNotExist:
         next_evolution = None
@@ -103,7 +102,7 @@ def show_pokemon(request, pokemon_id):
     requested_pokemons = PokemonEntity.objects.filter(pokemon=pokemon)
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     for pokemon_entity in requested_pokemons:
-        entity_img_uri = request.build_absolute_uri(f'{settings.MEDIA_URL}{pokemon_entity.pokemon.image}')
+        entity_img_uri = request.build_absolute_uri(pokemon_entity.pokemon.image.url)
         add_pokemon(
             folium_map,
             pokemon_entity.lat,
