@@ -68,6 +68,8 @@ def show_pokemon(request, pokemon_id):
     except ObjectDoesNotExist:
         HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
+    print(pokemon.image.url)
+
     pokemon_img_uri = request.build_absolute_uri(f'{settings.MEDIA_URL}{pokemon.image}')
     previous_evolution = None
     if pokemon.evolves_from:
@@ -78,7 +80,7 @@ def show_pokemon(request, pokemon_id):
         }
 
     try:
-        successor = pokemon.pokemon_set.get(evolves_from=pokemon)
+        successor = pokemon.evolver.get(evolves_from=pokemon)
         next_evolution = {
             "title_ru": successor.title,
             "pokemon_id": successor.id,
