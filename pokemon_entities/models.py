@@ -30,7 +30,7 @@ class Pokemon(models.Model):
         null=True,
         blank=True,
         verbose_name='Эволюционировал из',
-        related_name='evolver'
+        related_name='prev_evolution'
     )
 
     def __str__(self):
