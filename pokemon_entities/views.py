@@ -25,8 +25,6 @@ def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
     )
     folium.Marker(
         [lat, lon],
-        # Warning! `tooltip` attribute is disabled intentionally
-        # to fix strange folium cyrillic encoding bug
         icon=icon,
     ).add_to(folium_map)
 
@@ -67,13 +65,14 @@ def show_pokemon(request, pokemon_id):
     pokemon = get_object_or_404(Pokemon, id=pokemon_id)
 
     pokemon_img_uri = request.build_absolute_uri(pokemon.image.url)
-    print(pokemon_img_uri)
     previous_evolution = None
     if pokemon.evolves_from:
         previous_evolution = {
             "title_ru": pokemon.evolves_from.title,
             "pokemon_id": pokemon.evolves_from.id,
-            "img_url": request.build_absolute_uri(pokemon.evolves_from.image.url)
+            "img_url": request.build_absolute_uri(
+                pokemon.evolves_from.image.url
+                )
         }
 
     try:
@@ -100,7 +99,9 @@ def show_pokemon(request, pokemon_id):
     requested_pokemons = PokemonEntity.objects.filter(pokemon=pokemon)
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     for pokemon_entity in requested_pokemons:
-        entity_img_uri = request.build_absolute_uri(pokemon_entity.pokemon.image.url)
+        entity_img_uri = request.build_absolute_uri(
+            pokemon_entity.pokemon.image.url
+            )
         add_pokemon(
             folium_map,
             pokemon_entity.lat,
